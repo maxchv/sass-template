@@ -1,7 +1,168 @@
-$bg-primary: blue;
-$text-light: yellow;
+// Вложенность
+// Sass позволит вам вкладывать CSS селекторы таким же образом, как и в визуальной иерархии HTML
+nav {
+    ul {
+        color: white;
+        background: {
+            color: black;
+        }
+        font: {
+            style: normal;
+            family: cursive;
+        }
+    }
+}
 
-body {
-    color: $text-light;
-    background-color: $bg-primary;
+// Ссылка на родителя &
+a {
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: overline;
+    }
+}
+
+// Вложенные свойства
+.funky {
+    font: {
+      family: fantasy;
+      size: 30em;
+      weight: bold;
+    }
+  }
+
+// Импорт файлов со стилями
+@import 'reset';
+
+// Переменные
+// Вы можете хранить в переменных цвета, стеки шрифтов или любые другие значения CSS, которые вы хотите использовать. 
+// Чтобы создать переменную в Sass нужно использовать символ $.
+$var: test;
+
+// На видимость переменных влияет уровень вложенности селекторов. 
+// Если переменная определена вне каких-либо вложенных селекторов, она видна везде. 
+// Переменная может быть определена с !global
+
+// Типы данных
+/*
+В языке sass поддерживается семь основных типов переменных:
+
+numbers - числовый тип
+Примеры данного типа: 1.2, 3, 10px;
+
+strings - текстовый тип с кавычками и без "foo", 'foo', foo;
+
+colors - цветовой тип. 
+
+booleans - логический тип (true, false). 
+Данный тип тспользуется вкупе с управляющей конструкцией @if.
+
+nulls - не определенная переменная. 
+Данный тип практически не используется.
+
+lists - списки значений, разделенных пробелами или запятыми - данный тип как правило используется 
+для задания семейства шрифтов. Возможно для задания значений в margin-ах или padding-ах, но это редко, для этого используется тип numbers.
+Примеры данного типа: 1.5em 1em 0 2em, Helvetica, Arial, sans-serif.
+
+maps - карты от одного значения к другому. Данный тип по сути очень похож на объект в javascript.
+Пример данного типа: (key1: value1, key2: value2).
+*/
+
+// Операции
+
+// Функции
+$grid-with: 40px;
+$gutter-with: 10px;
+@function grid-with($n) {
+    @return $n * $grid-with + ($n - 1) * $gutter-with;
+}
+
+#sidebar {
+    width: grid-with(5);
+}
+
+// Интерполяции
+
+// Управляющие директивы и выражения
+// @if, @else if, @else - условия
+$type: monster;
+p {
+    @if $type == ocean {
+        color: blue;
+    } @else if $type == matador {
+        color: red;
+    } @else if $type == monster {
+        color: green;
+    } @else {
+        color: black;
+    }
+}
+// @for - циклы
+@for $i from 1 through 12 {
+    .col#{$i} {
+        width: 100% / $i;
+    }
+}
+
+// @each - перебор последовательности 
+@each $animal in puma, lion {
+    .#{$animal}-icon {
+        width: 100px;
+        height: 100px;
+        background-color: yellow;
+        background-size: 100%;
+        background-image: url('../icon/#{$animal}.png');
+    }
+}
+
+$i: 1;
+@while $i <= 12 {
+    .s#{$i} {
+        width: 100% / $i;
+    }
+}
+
+// Математические операторы
+
+// Миксины (примеси)
+// Миксины позволяют создавать группы деклараций CSS, которые вам придется использовать по нескольку раз на сайте. 
+
+@mixin transform($prop) {
+    -webkit-transform: $prop;
+    -o-transform: $prop;
+    -moz-transform: $prop;
+    -ms-transform: $prop;
+    transform: $prop;
+}
+
+.box {
+    @include transform(rotate(30deg));
+}
+
+// Расширение/Наследование
+// Используя директиву @extend можно наследовать наборы свойств CSS от одного селектора другому. 
+%message {
+    border: 1px solid #ccc;
+    padding: 10px;
+    color: #333;
+}
+
+.message {
+    @extend %message;
+}
+
+.success {
+    @extend %message;
+    border-color: green;
+}
+
+.error {
+    @extend %message;
+    border-color: red;
+}
+
+.warning {
+    @extend %message;
+    border-color:yellow;
 }
